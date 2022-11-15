@@ -1,6 +1,6 @@
 import UIKit
 
-struct asdf: Codable {
+struct User: Codable {
     let userId: Int
     let id: Int
     let title: String
@@ -12,13 +12,12 @@ enum GFError: String, Error {
     case decodingError = "There is a problem with decoding"
 }
 
-var fdsa = [asdf]()
+var users = [User]()
 
-func fetchData(completion: @escaping(Result<[asdf],GFError>) -> Void) {
+func fetchData(completion: @escaping(Result<[User],GFError>) -> Void) {
     let api = "https://jsonplaceholder.typicode.com/posts"
     guard let url = URL(string: api) else {fatalError()}
-    let session = URLSession(configuration: .default)
-    session.dataTask(with: url) { (data, response, error) in
+    let session = URLSession.shared.dataTask(with: url) { (data, response, error) in
         DispatchQueue.main.async {
             guard let data = data, error == nil else {
                 completion(.failure(.serverError))
@@ -26,23 +25,25 @@ func fetchData(completion: @escaping(Result<[asdf],GFError>) -> Void) {
             }
             do {
                 let decoder = JSONDecoder()
-                let profiles = try decoder.decode([asdf].self, from: data)
-                completion(.success(profiles))
+                let users = try decoder.decode([User].self, from: data)
+                completion(.success(users))
             } catch {
                 completion(.failure(.decodingError))
             }
         }
-    }.resume()
+    }
+    session.resume()
 }
+
 
 fetchData { result in
     switch result {
-    case .failure(.decodingError): print(GFError.decodingError)
-    case .failure(.serverError): print(GFError.serverError)
-    case .success(<#T##[asdf]#>): fdsa.append(<#T##newElement: asdf##asdf#>)
+    case .failure(.decodingError):
+        print(GFError.decodingError)
+    case .failure(.serverError):
+        print(GFError.serverError)
+    case .success(let Users):
+        users.append(contentsOf: Users)
+        print(users)
     }
-}
-
-for i in fdsa {
-    print(i)
 }

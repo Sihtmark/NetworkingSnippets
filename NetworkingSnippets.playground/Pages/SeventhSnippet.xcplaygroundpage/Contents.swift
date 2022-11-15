@@ -137,4 +137,6 @@ class NetworkManager {
         }
         task.resume()
     }
+    
 }
+
