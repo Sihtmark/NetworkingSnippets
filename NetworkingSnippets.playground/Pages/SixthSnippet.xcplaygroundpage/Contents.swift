@@ -18,18 +18,16 @@ func fetchData(completion: @escaping(Result<[User],GFError>) -> Void) {
     let api = "https://jsonplaceholder.typicode.com/posts"
     guard let url = URL(string: api) else {fatalError()}
     let session = URLSession.shared.dataTask(with: url) { (data, response, error) in
-        DispatchQueue.main.async {
-            guard let data = data, error == nil else {
-                completion(.failure(.serverError))
-                return
-            }
-            do {
-                let decoder = JSONDecoder()
-                let users = try decoder.decode([User].self, from: data)
-                completion(.success(users))
-            } catch {
-                completion(.failure(.decodingError))
-            }
+        guard let data = data, error == nil else {
+            completion(.failure(.serverError))
+            return
+        }
+        do {
+            let decoder = JSONDecoder()
+            let users = try decoder.decode([User].self, from: data)
+            completion(.success(users))
+        } catch {
+            completion(.failure(.decodingError))
         }
     }
     session.resume()
