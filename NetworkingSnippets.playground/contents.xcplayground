@@ -6,5 +6,8 @@
         <page name='ThirdSnippet'/>
         <page name='FourthSnippet'/>
         <page name='FifthSnippet'/>
+        <page name='SixthSnippet'/>
+        <page name='SeventhSnippet'/>
+        <page name='EighthSnippet'/>
     </pages>
 </playground>
